@@ -12,8 +12,8 @@ This data was collected between July 21 and August 4 in 2022 through online and 
 Useful links:
 \itemize{
   \item \url{https://github.com/...}
-  \item \url{https://zehuiyin.github.io/...}
-  \item Report bugs at \url{https://github.com/zehuiyin/.../issues}
+  \item \url{https://.../...}
+  \item Report bugs at \url{https://github.com/Horan517/.../issues}
 }
 
 }

@@ -1,0 +1,42 @@
+---
+title: "TravelBehaviorQinghaiData-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{TravelBehaviorQinghaiData-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introducation 
+
+This vignette demonstrates how to use the TravelBehaviorQinghaiData package to load the TBQT dataset and perform basic statistical analysis.
+
+# Load Packages
+
+```{r setup}
+library(TravelBehaviorQinghaiData)
+```
+
+# Performe Statistical Analysis
+
+The TBQT dataset is included in the package. You can load it with the data() function and use base R functions for statistical analysis. Here is an example:
+
+```{r}
+data("TBQT")
+
+summary(TBQT)
+
+head(TBQT)
+
+colSums(is.na(TBQT))
+
+# Explore correlation between age and income)
+cor(TBQT$age, TBQT$income, use = "complete.obs")
+```

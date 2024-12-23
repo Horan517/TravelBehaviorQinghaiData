@@ -44,8 +44,6 @@ library(TravelBehaviorQinghaiData)
 
 ...
 
-
-
 # How to cite
 
 Xu, H. (2024). TravelBehaviorQinghaiData: Data for the paper "Assessing the influence of tourists’ perceived travel environment and their travel behavior on travel satisfaction using structural equation models (SEM): a case of Qinghai-Tibet Plateau". https://github.com/Horan517/TravelBehaviorQinghaiData
