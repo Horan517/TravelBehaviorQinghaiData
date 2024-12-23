@@ -1,0 +1,145 @@
+---
+title: "data_prep"
+author: "Haoran Xu"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The file of `TBQT_raw.xlsx` is the Excel file that contained all of the questionnaire results collected for the paper. It contains one sheet, as follows:
+
+- Original Q Results (n = 814): the raw data
+
+This markdown file is created to clean the data and convert it into `.RData` file to be used in modelling and subsequent analysis. 
+
+Load the packages needed to preprocess the data:
+```{r}
+library(tidyverse)
+library(readxl)
+library(here)
+```
+
+```{r}
+# Define the file paths using here()
+input_path <- paste0(here(), "/data-raw/TBQT_raw.xlsx")
+output_path <- paste0(here(), "/data-raw/TBQT_raw.csv")
+
+# Converting .xlsx file into .csv file while deleting its first row of question descriptions
+TBQT <- readxl::read_excel(input_path)
+
+# Define the variable names
+colnames(TBQT) <- c(
+  "numbering", "type", "gender", "age", "residence", "income", "edu_lvl", 
+  "profession", "household_size", "dri_lic", "num_cars", 
+  "purpose1", "purpose2", "purpose3", "purpose4", "purpose5", 
+  "self_drive", "other_drive", "pub_trans", "bicycle", "walking", 
+  "frequency_travel", "planned_travel_time", 
+  "attraction_type1", "attraction_type2", "attraction_type3", 
+  "daily_t", "daily_d", "exp_lvl", "num_phones", 
+  "if_connected_network", "stability_network", 
+  "daily_phone_use_t", "frequency_phone_use", "daily_devices_use_t", 
+  "device_proficiency", 
+  "value_e_devices1", "value_e_devices2", "value_e_devices3", 
+  "value_e_devices4", "value_e_devices5", "value_e_devices6", 
+  "value_e_devices7", "value_e_devices8", "value_e_devices9", 
+  "value_e_devices10", "travel_safety1", "travel_safety2", 
+  "travel_safety3", "travel_safety4", "travel_safety5", 
+  "travel_safety6", "travel_safety7", "sati_lvl", 
+  "prss_allevi", "hlt_impro", "ta_envi1", "ta_envi2", 
+  "ta_envi3", "ta_envi4", "ta_envi5", "ta_envi6", 
+  "r_envi1", "r_envi2", "r_envi3", "r_envi4", "r_envi5"
+)
+```
+
+Convert all the cells of missing data (value == -2) into NA:
+```{r}
+TBQT <- TBQT %>%
+  mutate(across(everything(), ~ ifelse(. == -2, NA, .)))
+```
+
+Adjust the values for some dummy variables and some variables that used 5-point Likert scales:
+```{r}
+# convert some binary variables that originally used {1, 2} into {0, 1}
+TBQT <- TBQT %>%
+  mutate(
+    gender = ifelse(gender == 1, 0, 1),
+    dri_lic = ifelse(dri_lic == 2, 0, 1),
+    if_connected_network = ifelse(if_connected_network == 2, 0, 1)
+  )
+
+# the options of ordinal variable `num_cars` in the questionnaire are set wrong and here needs to re-assign its values
+TBQT <- TBQT %>%
+  mutate(
+    num_cars = case_when(
+      num_cars == 4 ~ 0,
+      num_cars == 5 ~ 4,
+      TRUE ~ num_cars
+    )
+  )
+
+# reverse the order of more ordinal variables that used 3-point or 5-point Likert scale
+TBQT <- TBQT %>%
+  mutate(
+    stability_network = 4 - stability_network,
+    frequency_phone_use = 4 - frequency_phone_use,
+    device_proficiency = 5 - device_proficiency
+  )
+
+columns_to_reverse <- c(
+  "exp_lvl", "value_e_devices1", "value_e_devices2", "value_e_devices3", 
+  "value_e_devices4", "value_e_devices5", "value_e_devices6", 
+  "value_e_devices7", "value_e_devices8", "value_e_devices9", 
+  "value_e_devices10", "travel_safety1", "travel_safety2", 
+  "travel_safety3", "travel_safety4", "travel_safety5", 
+  "travel_safety6", "travel_safety7", "sati_lvl", 
+  "prss_allevi", "hlt_impro", "ta_envi1", "ta_envi2", 
+  "ta_envi3", "ta_envi4", "ta_envi5", "ta_envi6", 
+  "r_envi1", "r_envi2", "r_envi3", "r_envi4", "r_envi5"
+)
+
+TBQT <- TBQT %>%
+  mutate(across(all_of(columns_to_reverse), ~ 6 - .))
+```
+
+Next, two variables are re-categorized. 
+
+One is `residence` variable, which will be re-categorized into "local = 1 or non-local = 0" based on people's answers that captured where they came from on a certain Chinese administrative district level (provinces/autonomous regions/municipalities). Those administrative districts on the Qinghai-Tibet Plateau (mainly from Qinghai Province, Xizang Autonomous Region, and part of Sichuan Province and Gansu Province) will be categorized as "local", while other places will be "non-local".
+
+The other variable is `profession`, which will be re-categorized into "flexible = 1 or inflexible = 0" based on their different profession characteristics. Professions as "Farmers (Herdsmen); Self-Employed; Freelancer; Student; Other" will be regarded as "flexible", while other types (Civil Servant; Engineering Specialist; Teacher; Full-time Driver; Researcher; Company Employee) will be counted as "inflexible".
+
+```{r}
+# recategorizing `residence` variable
+TBQT <- TBQT %>%
+  mutate(
+    # replacing all the "(空)" with NA
+    residence = ifelse(residence == "(空)", NA, residence),
+    
+    # replacing those texts containing "Qinghai"/"Xizang""Sichuan - Ganzi" with 1, while others with 0
+    residence = ifelse(
+      str_detect(residence, "青海|西藏|四川-甘孜"), 1, 0
+    )
+  )
+
+# recategoizing `profession` variable
+TBQT <- TBQT %>%
+  mutate(profession = case_when(
+    profession %in% c(2, 4, 8, 9, 11) ~ 1,
+    TRUE ~ 0
+  ))
+```
+
+New summary of the dataframe:
+```{r}
+summary(TBQT)
+```
+
+Save to data folder:
+```{r}
+# Save the cleaned data as a CSV file
+write_csv(TBQT, output_path)
+
+# save to `data` folder 
+usethis::use_data(TBQT
+                  , overwrite = TRUE)
+```
