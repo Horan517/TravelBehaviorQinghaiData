@@ -18,6 +18,7 @@ Load the packages needed to preprocess the data:
 library(tidyverse)
 library(readxl)
 library(here)
+library(lavaan)
 ```
 
 ```{r}
