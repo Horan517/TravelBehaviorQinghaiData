@@ -26,7 +26,7 @@ The package contains the data for the paper title "Assessing the influence of to
 
 You can install the development version of `TravelBehaviorQinghaiData` from [GitHub](https://github.com) with:
 
-``` r
+```{r}
 if(!require(remotes)){
     install.packages("remotes")
     library(remotes)
