@@ -26,7 +26,7 @@ Suggests:
     knitr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://github.com/..., https://.../...
-BugReports: https://github.com/Horan517/.../issues
+URL: https://github.com/Horan517/TravelBehaviorQinghaiData, https://github.com/Horan517/TBQTSEM
+BugReports: https://github.com/Horan517/TravelBehaviorQinghaiData/issues
 VignetteBuilder: knitr
 

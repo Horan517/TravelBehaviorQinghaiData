@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The `TravelBehaviorQinghaiData` is an r package created by first-year PhD student [Haoran Xu](https://github.com/Horan517) for the final course project of ["GEOG712 - Reproducible Research Workflow"](https://github.com/paezha/Reproducible-Research-Workflow/tree/master), taught by Dr. Antonio Paez at McMaster University, Canada. 
+The `TravelBehaviorQinghaiData` is an r package created by first-year PhD student [Haoran Xu](https://github.com/Horan517) for the final course project ["TBQT"](https://github.com/Horan517/TBQTSEM) of ["GEOG712 - Reproducible Research Workflow"](https://github.com/paezha/Reproducible-Research-Workflow/tree/master), taught by Dr. Antonio Paez at McMaster University, Canada.
 
-The package contains the data for the paper title "Assessing the influence of tourists’ perceived travel environment and their travel behavior on travel satisfaction using structural equation models (SEM): a case of Qinghai-Tibet Plateau". The data was collected between July 21 and August 4 in 2022 through distributing online and on-site questionnaires by the research group of [Dr. Huaxiong Jiang](https://www.researchgate.net/scientific-contributions/Huaxiong-Jiang-2157090528). It was designed to collect local and non-local tourists' travel behavior and their perceptions of travel environment on Qinghai-Tibet Plateau.
+The package contains the data for the paper title "Assessing the influence of tourists’ perceived travel environment and their travel behavior on travel satisfaction using structural equation models (SEM): a case of Qinghai-Tibet Plateau". The data was collected between July 21 and August 4 in 2022 through distributing online and on-site questionnaires by the research group of [Dr. Huaxiong Jiang](https://www.researchgate.net/scientific-contributions/Huaxiong-Jiang-2157090528). It was designed to collect local and non-local tourists' travel behavior and their perceptions of travel environment on Qinghai-Tibet Plateau. The complete questionnaire, originally in Chinese and translated in English, is stored in `data-raw` folder as a bilingual version.
 
 ## Installation
 
@@ -40,9 +40,12 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(TravelBehaviorQinghaiData)
-```
 
-...
+data(TBQT)
+
+head(TBQT)
+summary(TBQT)
+```
 
 # How to cite
 

@@ -11,9 +11,9 @@ This data was collected between July 21 and August 4 in 2022 through online and 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/...}
-  \item \url{https://.../...}
-  \item Report bugs at \url{https://github.com/Horan517/.../issues}
+  \item \url{https://github.com/Horan517/TravelBehaviorQinghaiData}
+  \item \url{https://github.com/Horan517/TBQTSEM}
+  \item Report bugs at \url{https://github.com/Horan517/TravelBehaviorQinghaiData/issues}
 }
 
 }
